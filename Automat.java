@@ -1,4 +1,3 @@
-
 import java.io.BufferedReader;
 import java.io.FileWriter;
 import java.io.IOException;
@@ -111,25 +110,24 @@ class UniqueQueue<T> implements Queue<T> {
 
 class State{
     private String name;
-    private Map<String, UniqueQueue<State>> transitions;
-
-    public static UniqueQueue<State> allStates = new UniqueQueue<>();
+    private Map<String, UniqueQueue<State>> mapOfTransitions;
+    public static UniqueQueue<State> ListOfStates = new UniqueQueue<>();
 
     public State(String name){
         this.name = name;
-        transitions = new HashMap<String, UniqueQueue<State>>();
+        mapOfTransitions = new HashMap<String, UniqueQueue<State>>();
     }
 
     public String getName(){
         return name;
     }
 
-    public Map<String, UniqueQueue<State>> getTransitions(){
-        return transitions;
+    public Map<String, UniqueQueue<State>> getMapOfTransitions(){
+        return mapOfTransitions;
     }
 
     public static State StateToString(String name){
-        for(State s : allStates){
+        for(State s : ListOfStates){
             if(s.getName().equals(name)){
                 return s;
             }
@@ -137,7 +135,7 @@ class State{
         return null;
     }
 
-    public static UniqueQueue<String> StringElements(UniqueQueue<State> states){
+    public static UniqueQueue<String> ListOfStatesToString(UniqueQueue<State> states){
         UniqueQueue<String> output = new UniqueQueue<>();
         if(states == null){
             return  output;
@@ -173,7 +171,7 @@ public class Automat {
 
     public void Rec(String curr, UniqueQueue<String> output){
         State sadasnji = State.StateToString(curr);
-        Map<String, UniqueQueue<State>> sadasnji_map = sadasnji.getTransitions();
+        Map<String, UniqueQueue<State>> sadasnji_map = sadasnji.getMapOfTransitions();
 
         if(sadasnji_map.containsKey("$") == false){
             return;
@@ -186,7 +184,7 @@ public class Automat {
         output.add(curr);
 
         UniqueQueue<String> sadasnji_list = new UniqueQueue<>();
-        sadasnji_list.addAll( State.StringElements(sadasnji_map.get("$")));
+        sadasnji_list.addAll( State.ListOfStatesToString(sadasnji_map.get("$")));
 
         Iterator<String> Iterator = sadasnji_list.iterator();
 
@@ -202,7 +200,6 @@ public class Automat {
     public static void main(String[] args) throws IOException {
 
         FileWriter writer = new FileWriter("output.txt");
-
         BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
 
         //prvi red - inputa
@@ -224,17 +221,12 @@ public class Automat {
         }
 
         s = reader.readLine(); //Stanja
-        //List<String> stanja = new ArrayList<>();
         str = s.split(",");
-        State.allStates.add((new State("#")));
+        State.ListOfStates.add((new State("#")));
         for (String el : str) {
-            State.allStates.add(new State(el));
+            State.ListOfStates.add(new State(el));
 
         }
-
-//        for(var x: State.allStates){
-//            System.out.println(x.getName());
-//        }
 
         s = reader.readLine(); //Abeceda
         LinkedList<String> abeceda = new LinkedList<>();
@@ -250,11 +242,9 @@ public class Automat {
             prihvatljiva_stanja.add(el);
         }
 
-        String pocetak = reader.readLine(); //Pocetak
+        String pocetak = reader.readLine(); //Pocetno stanje
 
-
-
-        s = reader.readLine(); //Pocetak stanja
+        s = reader.readLine(); //Pocetak tranzicija
         while (s != null) {
             String pocetno;
 
@@ -263,7 +253,7 @@ public class Automat {
             matcher3.find();
             pocetno = matcher3.group(1);
 
-            var mapa = State.StateToString(pocetno).getTransitions();
+            var mapa = State.StateToString(pocetno).getMapOfTransitions();
 
             String unos;
             Pattern pattern2 = Pattern.compile(",(.*?)->");
@@ -290,7 +280,6 @@ public class Automat {
             s = reader.readLine();
         }
 
-
         for (List<String> inputs_list : inputs) {
 
             UniqueQueue<String> queue = new UniqueQueue<String>();
@@ -312,14 +301,13 @@ public class Automat {
                     String el = queue.peek();
                     State current = State.StateToString(el);
 
-
                     UniqueQueue<String> novo = labObj.Rekurzija(el, sadasnji);
 
                     sadasnji.addAll(novo);
                     queue.addAll(novo);
 
-                    Map<String, UniqueQueue<State>> current_map = current.getTransitions();
-                    buduci.addAll(State.StringElements(current_map.get(input)));
+                    Map<String, UniqueQueue<State>> current_map = current.getMapOfTransitions();
+                    buduci.addAll(State.ListOfStatesToString(current_map.get(input)));
                     queue.remove();
                 }
                 set.addAll(sadasnji);
@@ -386,10 +374,7 @@ public class Automat {
             }
 
             ispis = ispis + '\n';
-            writer.append(ispis);
-
-//            System.out.println(ispis);
-//            System.out.println("RADI LI OVO");
+            writer.write(ispis);
         }
 
 
