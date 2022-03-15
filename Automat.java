@@ -109,9 +109,10 @@ class UniqueQueue<T> implements Queue<T> {
 }
 
 class State{
-    private String name;
-    private Map<String, UniqueQueue<State>> mapOfTransitions;
     public static UniqueQueue<State> ListOfStates = new UniqueQueue<>();
+
+    private Map<String, UniqueQueue<State>> mapOfTransitions;
+    private final String name;
 
     public State(String name){
         this.name = name;
@@ -199,7 +200,7 @@ public class Automat {
 
     public static void main(String[] args) throws IOException {
 
-        FileWriter writer = new FileWriter("output.txt");
+//        FileWriter writer = new FileWriter("output.txt");
         BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
 
         //prvi red - inputa
@@ -373,12 +374,14 @@ public class Automat {
                 ispis = ispis + "#";
             }
 
-            ispis = ispis + '\n';
-            writer.write(ispis);
+            ispis = ispis + '\r' + '\n';
+//            ispis = ispis  + '\n';
+            System.out.print(ispis);
+//            writer.write(ispis);
         }
 
 
-        writer.close();
+//        writer.close();
     }
 
 }
