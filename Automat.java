@@ -374,8 +374,8 @@ public class Automat {
                 ispis = ispis + "#";
             }
 
-            ispis = ispis + '\r' + '\n';
-//            ispis = ispis  + '\n';
+//            ispis = ispis + '\r' + '\n';
+            ispis = ispis  + '\n';
             System.out.print(ispis);
 //            writer.write(ispis);
         }
